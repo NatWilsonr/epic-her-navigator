@@ -5,15 +5,271 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EPIC Her Navigator</title>
+    <meta name="description"
+        content="EPIC Her Navigator - an AI-powered entry point for women exploring entrepreneurship at EPIC Lab." />
     <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
+    <header class="site-header">
+        <div class="container nav">
+            <div class="brand">
+                <span class="brand-mark">✦</span>
+                <div>
+                    <p class="brand-top">EPIC Lab</p>
+                    <h1 class="brand-title">EPIC Her Navigator</h1>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#about">About</a>
+                <a href="#demo">Demo</a>
+                <a href="#impact">Impact</a>
+            </nav>
+        </div>
+    </header>
+
     <main>
-        <h1>EPIC Her Navigator</h1>
-        <p>An AI-powered entry point for women exploring entrepreneurship at EPIC Lab.</p>
-        <button>Start your path</button>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <p class="eyebrow">AI-powered founder guidance</p>
+                    <h2>Find your entrepreneurial path in 2 minutes.</h2>
+                    <p class="hero-text">
+                        EPIC Her Navigator is a women-centered digital entry point inside the EPIC ecosystem.
+                        It helps students identify their stage, understand their biggest blocker, and discover
+                        the best next opportunity, mentor, and support path.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#demo">Start your path</a>
+                        <a class="btn btn-secondary" href="#about">See how it works</a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">4</span>
+                            <span class="stat-label">guided questions</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">1</span>
+                            <span class="stat-label">personalized path</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">∞</span>
+                            <span class="stat-label">ways to grow</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="panel-badge">Live product concept</div>
+                    <div class="mini-window">
+                        <div class="mini-window-top">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="mini-window-body">
+                            <div class="mini-chat">
+                                <div class="mini-bot">Hi! I’ll help you find your best next step at EPIC Her.</div>
+                                <div class="mini-user">I’m interested, but I don’t know where to start.</div>
+                                <div class="mini-result">
+                                    <strong>Profile:</strong> Early-Stage Explorer<br />
+                                    <strong>Next step:</strong> Join the founder workshop + peer circle
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="panel-note">
+                        Built as a lightweight product demo for the EPIC Lab gender parity challenge.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about" id="about">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">How it works</p>
+                    <h3>From interest to participation</h3>
+                    <p>
+                        Instead of asking students to figure everything out alone, the tool guides them into
+                        the right opportunities with a simple, personalized onboarding flow.
+                    </p>
+                </div>
+
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <div class="feature-icon">01</div>
+                        <h4>Understand the student</h4>
+                        <p>
+                            A short chat asks about startup stage, blockers, support needs, and areas of
+                            interest.
+                        </p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">02</div>
+                        <h4>Generate a smart path</h4>
+                        <p>
+                            The system maps each answer set into a founder profile, a top barrier, and a next
+                            action.
+                        </p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">03</div>
+                        <h4>Recommend people and programs</h4>
+                        <p>
+                            Students receive tailored mentor and opportunity suggestions that feel concrete and
+                            actionable.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo" id="demo">
+            <div class="container demo-grid">
+                <div class="demo-copy">
+                    <p class="eyebrow">Interactive demo</p>
+                    <h3>Try the EPIC Her guide</h3>
+                    <p>
+                        This is the main experience you would show in your application video. It behaves like
+                        an AI onboarding assistant, but it is lightweight enough to ship fast on GitHub Pages.
+                    </p>
+
+                    <div class="demo-notes">
+                        <div class="note-card">
+                            <strong>What it detects</strong>
+                            <p>Founder stage, key blocker, ideal support format, and interest area.</p>
+                        </div>
+                        <div class="note-card">
+                            <strong>What it returns</strong>
+                            <p>A profile, mentor fit, next-step plan, and suggested EPIC opportunities.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-shell">
+                    <div class="chat-header">
+                        <div>
+                            <p class="chat-kicker">EPIC Her Assistant</p>
+                            <h4>Navigator chat</h4>
+                        </div>
+                        <button id="reset-chat" class="text-button" type="button">Reset</button>
+                    </div>
+
+                    <div id="chat-messages" class="chat-messages" aria-live="polite"></div>
+
+                    <div id="chat-options" class="chat-options"></div>
+
+                    <div class="chat-footer">
+                        <button id="start-chat" class="btn btn-primary" type="button">
+                            Start your path
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <section id="results-section" class="results hidden" aria-live="polite">
+                    <div class="results-header">
+                        <p class="eyebrow">Your personalized result</p>
+                        <h3>Your EPIC Her path</h3>
+                        <p>
+                            This is the output screen that makes the product feel useful, specific, and demoable.
+                        </p>
+                    </div>
+
+                    <div class="results-grid">
+                        <article class="result-main-card">
+                            <div class="result-tag" id="profile-tag">Profile</div>
+                            <h4 id="profile-title">Profile title</h4>
+                            <p id="profile-summary">Summary goes here.</p>
+
+                            <div class="result-row">
+                                <div>
+                                    <span class="result-label">Main barrier</span>
+                                    <p id="main-barrier">Barrier</p>
+                                </div>
+                                <div>
+                                    <span class="result-label">Best next step</span>
+                                    <p id="next-step">Next step</p>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="result-side-card">
+                            <h4>Recommended mentor</h4>
+                            <p id="mentor-match">Mentor match</p>
+                            <span class="pill" id="mentor-pill">Mentor type</span>
+                        </article>
+
+                        <article class="result-side-card">
+                            <h4>Best EPIC opportunity</h4>
+                            <p id="opportunity-match">Opportunity match</p>
+                            <span class="pill" id="opportunity-pill">Opportunity</span>
+                        </article>
+                    </div>
+
+                    <article class="path-card">
+                        <h4>Suggested 4-step path</h4>
+                        <div id="path-steps" class="path-steps"></div>
+                    </article>
+
+                    <div class="results-actions">
+                        <button id="try-again" class="btn btn-secondary" type="button">Try another path</button>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section class="impact" id="impact">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Why this matters</p>
+                    <h3>A tool for students and for EPIC</h3>
+                    <p>
+                        The student gets clarity and belonging. EPIC gets a clearer view of what women in the
+                        ecosystem actually need.
+                    </p>
+                </div>
+
+                <div class="impact-grid">
+                    <article class="impact-card">
+                        <h4>Barrier visibility</h4>
+                        <p>
+                            Surface patterns such as confidence, network gaps, or uncertainty around where to
+                            begin.
+                        </p>
+                    </article>
+
+                    <article class="impact-card">
+                        <h4>Better program fit</h4>
+                        <p>
+                            Help route students toward the mentor, event, workshop, or community support that
+                            fits them best.
+                        </p>
+                    </article>
+
+                    <article class="impact-card">
+                        <h4>Higher participation</h4>
+                        <p>
+                            Reduce the friction between being interested in entrepreneurship and actually joining
+                            the ecosystem.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <footer class="site-footer">
+        <div class="container footer-wrap">
+            <p>EPIC Her Navigator — demo concept for the MAD Fellows Challenge 2026.</p>
+            <p>Built as a lightweight GitHub Pages product prototype.</p>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
