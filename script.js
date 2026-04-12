@@ -97,9 +97,9 @@ function startChat() {
     state.started = true;
     startChatButton.style.display = "none";
 
-    addMessage("Hi! I’m the EPIC Her guide.", "bot");
+    addMessage("Hi! I’m your EPIC Her guide.", "bot");
     addMessage(
-        "I’ll ask you a few short questions and then suggest your best next step inside the EPIC ecosystem.",
+        "I’ll ask you four quick questions to understand your founder stage, your biggest blocker, and the kind of support that would help you most.",
         "bot"
     );
 
@@ -123,8 +123,8 @@ function handleAnswer(option) {
     } else {
         chatOptions.innerHTML = "";
         setTimeout(() => {
-            addMessage("Got it — I’ve mapped your path.", "bot");
-            addMessage("Here is your personalized EPIC Her result.", "bot");
+            addMessage("Thanks — I’ve mapped your EPIC Her entry path.", "bot");
+            addMessage("Here’s the support route that fits you best right now.", "bot");
             showResults(buildResult(state.answers));
         }, 400);
     }
@@ -144,30 +144,28 @@ function buildResult(answers) {
         path: []
     };
 
-    // Profile
     if (answers.ideaStage === "not-yet") {
         result.profileTag = "Explorer";
         result.profileTitle = "Early-Stage Explorer";
         result.profileSummary =
-            "You are curious about entrepreneurship and ready to engage, but you need a clear and welcoming entry point.";
+            "You are entrepreneurially curious and ready to engage, but you need a welcoming first step that makes the ecosystem feel accessible and actionable.";
     } else if (answers.ideaStage === "kind-of") {
         result.profileTag = "Emerging Founder";
         result.profileTitle = "Emerging Founder";
         result.profileSummary =
-            "You already have some direction and would benefit from structure, feedback, and the right people around you.";
+            "You already have the spark of an idea. What would help most now is structure, feedback, and the right people around you to turn possibility into momentum.";
     } else if (answers.ideaStage === "yes" && answers.support === "team") {
         result.profileTag = "Builder";
         result.profileTitle = "Builder Looking for Momentum";
         result.profileSummary =
-            "You already have a concrete idea and now need collaborators, strategic support, and ways to move faster.";
+            "You already have a concrete idea and are ready to move faster. The biggest unlock now is finding collaborators, support, and the right channel for traction.";
     } else {
         result.profileTag = "Founder";
         result.profileTitle = "Early-Stage Builder";
         result.profileSummary =
-            "You are ready to start building and would benefit from targeted mentorship and high-fit EPIC opportunities.";
+            "You are ready to start building. A high-fit mentor and the right EPIC opportunity could help you turn early ambition into visible progress.";
     }
 
-    // Barrier
     const barrierMap = {
         confidence: "Confidence and self-belief",
         direction: "Uncertainty around where to begin",
@@ -176,7 +174,6 @@ function buildResult(answers) {
     };
     result.barrier = barrierMap[answers.blocker];
 
-    // Mentor
     const mentorInterestMap = {
         fintech: "a female founder or operator with fintech experience",
         impact: "a mentor working in social innovation or mission-driven ventures",
@@ -185,9 +182,9 @@ function buildResult(answers) {
     };
 
     if (answers.support === "mentor") {
-        result.mentorType = "Mentor-first";
+        result.mentorType = "Mentor-first support";
         result.mentor =
-            `You would likely benefit most from ${mentorInterestMap[answers.interest]}, with an emphasis on regular guidance and founder confidence.`;
+            `You would likely benefit most from ${mentorInterestMap[answers.interest]}, especially someone who can offer direct guidance, confidence-building, and practical founder perspective.`;
     } else if (answers.support === "community") {
         result.mentorType = "Community + mentor";
         result.mentor =
@@ -195,19 +192,18 @@ function buildResult(answers) {
     } else if (answers.support === "workshops") {
         result.mentorType = "Skills mentor";
         result.mentor =
-            `You would benefit from ${mentorInterestMap[answers.interest]} who can translate ideas into practical next steps and recommend the right workshops.`;
+            `You would benefit from ${mentorInterestMap[answers.interest]} who can translate ideas into practical next steps and point you toward the most relevant hands-on learning opportunities.`;
     } else {
         result.mentorType = "Connector mentor";
         result.mentor =
             `A connector-style mentor would help you meet collaborators, refine your idea, and build traction around your interests in ${answers.interest === "ai" ? "AI and technology" : answers.interest}.`;
     }
 
-    // Opportunity + next step
     if (answers.blocker === "confidence") {
         result.nextStep = "Join a beginner-friendly founder session and a peer support circle.";
-        result.opportunityType = "Confidence-building path";
+        result.opportunityType = "Confidence-building pathway";
         result.opportunity =
-            "Start with an introductory EPIC Her event focused on founder identity, then move into mentorship and small-group support.";
+            "Start with an introductory EPIC Her experience focused on founder identity and belonging, then move into mentorship and small-group support.";
         result.path = [
             "Attend a beginner founder session",
             "Join the EPIC Her peer circle",
@@ -218,7 +214,7 @@ function buildResult(answers) {
         result.nextStep = "Use a structured pathway to move from curiosity into a concrete first project.";
         result.opportunityType = "Structured pathway";
         result.opportunity =
-            "A guided workshop series plus a mentor checkpoint would help you move from interest to action without feeling overwhelmed.";
+            "A guided workshop sequence plus a mentor checkpoint would help you move from interest to action without feeling overwhelmed.";
         result.path = [
             "Take the startup basics workshop",
             "Explore one problem area you care about",
@@ -227,7 +223,7 @@ function buildResult(answers) {
         ];
     } else if (answers.blocker === "network") {
         result.nextStep = "Prioritize community, mentor access, and higher-visibility EPIC opportunities.";
-        result.opportunityType = "Network-building path";
+        result.opportunityType = "Network-building pathway";
         result.opportunity =
             "You would benefit most from activities that create warm introductions, alumnae connections, and repeated touchpoints in the ecosystem.";
         result.path = [
@@ -238,7 +234,7 @@ function buildResult(answers) {
         ];
     } else {
         result.nextStep = "Start with skill-building and then move quickly into applied practice.";
-        result.opportunityType = "Skills-to-action path";
+        result.opportunityType = "Skills-to-action pathway";
         result.opportunity =
             "A hands-on workshop track would help you gain confidence and build momentum before stepping into a challenge or team-based experience.";
         result.path = [
@@ -249,11 +245,10 @@ function buildResult(answers) {
         ];
     }
 
-    // Small refinements for certain answer combinations
     if (answers.support === "team") {
-        result.opportunityType = "Team-building path";
+        result.opportunityType = "Team-building pathway";
         result.opportunity =
-            "Because you are looking for collaborators, your best path includes community events, team formation, and challenge-based participation.";
+            "Because you are looking for collaborators, your best path includes community events, founder matching, and challenge-based participation.";
         result.path[0] = "Join a founder matching session";
         result.path[1] = "Meet potential collaborators";
     }
