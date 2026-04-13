@@ -61,11 +61,6 @@ const mentorMatch = document.getElementById("mentor-match");
 const mentorPill = document.getElementById("mentor-pill");
 const opportunityMatch = document.getElementById("opportunity-match");
 const opportunityPill = document.getElementById("opportunity-pill");
-const pathSteps = document.getElementById("path-steps");
-
-const cardWorkshop = document.getElementById("card-workshop");
-const cardMentor = document.getElementById("card-mentor");
-const cardHackathon = document.getElementById("card-hackathon");
 
 function addMessage(text, sender = "bot") {
     const message = document.createElement("div");
@@ -128,9 +123,7 @@ function handleAnswer(option) {
         setTimeout(() => {
             addMessage("Thanks — I’ve mapped your EPIC Her entry path.", "bot");
             addMessage("Here’s the support route that fits you best right now.", "bot");
-            const result = buildResult(state.answers);
-            showResults(result);
-            updateOpportunityCards(result.recommendedCards);
+            showResults(buildResult(state.answers));
         }, 380);
     }
 }
@@ -145,9 +138,7 @@ function buildResult(answers) {
         mentor: "",
         mentorType: "",
         opportunity: "",
-        opportunityType: "",
-        path: [],
-        recommendedCards: []
+        opportunityType: ""
     };
 
     if (answers.ideaStage === "not-yet") {
@@ -210,58 +201,27 @@ function buildResult(answers) {
         result.opportunityType = "Confidence-building pathway";
         result.opportunity =
             "Start with an introductory EPIC Her experience focused on founder identity and belonging, then move into mentorship and small-group support.";
-        result.path = [
-            "Attend a beginner founder session",
-            "Join the EPIC Her peer circle",
-            "Book a mentor coffee chat",
-            "Apply to the Her Hackathon"
-        ];
-        result.recommendedCards = ["workshop", "mentor"];
     } else if (answers.blocker === "direction") {
         result.nextStep = "Use a structured pathway to move from curiosity into a concrete first project.";
         result.opportunityType = "Structured pathway";
         result.opportunity =
             "A guided workshop sequence plus a mentor checkpoint would help you move from interest to action without feeling overwhelmed.";
-        result.path = [
-            "Take the startup basics workshop",
-            "Explore one problem area you care about",
-            "Meet a mentor for feedback",
-            "Join a challenge or hackathon"
-        ];
-        result.recommendedCards = ["workshop", "mentor"];
     } else if (answers.blocker === "network") {
         result.nextStep = "Prioritize community, mentor access, and higher-visibility EPIC opportunities.";
         result.opportunityType = "Network-building pathway";
         result.opportunity =
             "You would benefit most from activities that create warm introductions, alumnae connections, and repeated touchpoints in the ecosystem.";
-        result.path = [
-            "Join an EPIC Her networking event",
-            "Meet a mentor aligned with your interests",
-            "Join a peer founder group",
-            "Pitch at a showcase or community event"
-        ];
-        result.recommendedCards = ["mentor", "hackathon"];
     } else {
         result.nextStep = "Start with skill-building and then move quickly into applied practice.";
         result.opportunityType = "Skills-to-action pathway";
         result.opportunity =
             "A hands-on workshop track would help you gain confidence and build momentum before stepping into a challenge or team-based experience.";
-        result.path = [
-            "Attend a practical startup workshop",
-            "Build a mini concept or prototype",
-            "Get mentor feedback",
-            "Join the Her Hackathon or venture challenge"
-        ];
-        result.recommendedCards = ["workshop", "hackathon"];
     }
 
     if (answers.support === "team") {
         result.opportunityType = "Team-building pathway";
         result.opportunity =
             "Because you are looking for collaborators, your best path includes community events, founder matching, and challenge-based participation.";
-        result.path[0] = "Join a founder matching session";
-        result.path[1] = "Meet potential collaborators";
-        result.recommendedCards = ["hackathon", "mentor"];
     }
 
     if (answers.ideaStage === "yes" && answers.blocker === "network") {
@@ -282,34 +242,8 @@ function showResults(result) {
     opportunityMatch.textContent = result.opportunity;
     opportunityPill.textContent = result.opportunityType;
 
-    pathSteps.innerHTML = "";
-    result.path.forEach((step, index) => {
-        const item = document.createElement("div");
-        item.className = "path-step";
-        item.innerHTML = `
-        <span class="path-step-number">Step ${index + 1}</span>
-        <div>${step}</div>
-      `;
-        pathSteps.appendChild(item);
-    });
-
     resultsSection.classList.remove("hidden");
     resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function updateOpportunityCards(recommendedCards) {
-    const cards = [cardWorkshop, cardMentor, cardHackathon];
-
-    cards.forEach((card) => {
-        card.classList.remove("is-recommended");
-    });
-
-    recommendedCards.forEach((cardName) => {
-        const target = document.querySelector(`[data-card="${cardName}"]`);
-        if (target) {
-            target.classList.add("is-recommended");
-        }
-    });
 }
 
 function resetExperience() {
@@ -321,7 +255,6 @@ function resetExperience() {
     chatOptions.innerHTML = "";
     resultsSection.classList.add("hidden");
     startChatButton.style.display = "inline-flex";
-    updateOpportunityCards([]);
 }
 
 startChatButton.addEventListener("click", startChat);
