@@ -62,6 +62,13 @@ const mentorPill = document.getElementById("mentor-pill");
 const opportunityMatch = document.getElementById("opportunity-match");
 const opportunityPill = document.getElementById("opportunity-pill");
 
+const aiSummary = document.getElementById("ai-summary");
+const primaryRecTitle = document.getElementById("primary-rec-title");
+const primaryRecDescription = document.getElementById("primary-rec-description");
+const secondaryRecTitle = document.getElementById("secondary-rec-title");
+const secondaryRecDescription = document.getElementById("secondary-rec-description");
+const recommendationWhy = document.getElementById("recommendation-why");
+
 function addMessage(text, sender = "bot") {
     const message = document.createElement("div");
     message.className = `message ${sender}`;
@@ -138,7 +145,33 @@ function buildResult(answers) {
         mentor: "",
         mentorType: "",
         opportunity: "",
-        opportunityType: ""
+        opportunityType: "",
+        primaryRecommendation: "",
+        primaryDescription: "",
+        secondaryRecommendation: "",
+        secondaryDescription: "",
+        aiSummary: "",
+        why: ""
+    };
+
+    const stagePhraseMap = {
+        "not-yet": "still exploring entrepreneurship",
+        "kind-of": "already carrying the spark of an idea",
+        "yes": "ready to move a concrete idea forward"
+    };
+
+    const blockerPhraseMap = {
+        confidence: "you want a lower-pressure way to build confidence",
+        direction: "you need a clearer starting point",
+        network: "you would benefit from stronger relationships and access",
+        skills: "you want more practical, hands-on experience"
+    };
+
+    const supportPhraseMap = {
+        mentor: "direct mentor guidance",
+        community: "a sense of community and belonging",
+        workshops: "structured, hands-on learning",
+        team: "collaborators and shared momentum"
     };
 
     if (answers.ideaStage === "not-yet") {
@@ -201,32 +234,73 @@ function buildResult(answers) {
         result.opportunityType = "Confidence-building pathway";
         result.opportunity =
             "Start with an introductory EPIC Her experience focused on founder identity and belonging, then move into mentorship and small-group support.";
+
+        result.primaryRecommendation = "Founder Workshop";
+        result.primaryDescription =
+            "A lower-pressure event designed to help you build confidence, meet the ecosystem, and turn early interest into a clearer founder direction.";
+        result.secondaryRecommendation = "Mentor Circle";
+        result.secondaryDescription =
+            "A strong follow-up if you want reassurance, perspective, and a more personal sense of support as you begin.";
     } else if (answers.blocker === "direction") {
         result.nextStep = "Use a structured pathway to move from curiosity into a concrete first project.";
         result.opportunityType = "Structured pathway";
         result.opportunity =
             "A guided workshop sequence plus a mentor checkpoint would help you move from interest to action without feeling overwhelmed.";
+
+        result.primaryRecommendation = "Founder Workshop";
+        result.primaryDescription =
+            "The best first move if you need a clearer place to start and want structure before committing to a bigger challenge.";
+        result.secondaryRecommendation = "Mentor Circle";
+        result.secondaryDescription =
+            "A useful second step for getting feedback, asking questions, and translating uncertainty into direction.";
     } else if (answers.blocker === "network") {
         result.nextStep = "Prioritize community, mentor access, and higher-visibility EPIC opportunities.";
         result.opportunityType = "Network-building pathway";
         result.opportunity =
             "You would benefit most from activities that create warm introductions, alumnae connections, and repeated touchpoints in the ecosystem.";
+
+        result.primaryRecommendation = "Mentor Circle";
+        result.primaryDescription =
+            "The strongest starting point if what you need most is access, connection, and more direct relationships inside the ecosystem.";
+        result.secondaryRecommendation = "Her Hackathon";
+        result.secondaryDescription =
+            "A high-energy next step where you can meet collaborators, build visibility, and expand your network through action.";
     } else {
         result.nextStep = "Start with skill-building and then move quickly into applied practice.";
         result.opportunityType = "Skills-to-action pathway";
         result.opportunity =
             "A hands-on workshop track would help you gain confidence and build momentum before stepping into a challenge or team-based experience.";
+
+        result.primaryRecommendation = "Founder Workshop";
+        result.primaryDescription =
+            "A practical first step if you want more structure, sharper skills, and a clearer understanding of how to begin building.";
+        result.secondaryRecommendation = "Her Hackathon";
+        result.secondaryDescription =
+            "A natural next move once you are ready to apply what you learned in a more active, build-oriented environment.";
     }
 
     if (answers.support === "team") {
         result.opportunityType = "Team-building pathway";
         result.opportunity =
             "Because you are looking for collaborators, your best path includes community events, founder matching, and challenge-based participation.";
+
+        result.primaryRecommendation = "Her Hackathon";
+        result.primaryDescription =
+            "Your best first move if you want to meet collaborators, work alongside others, and build momentum through a shared challenge.";
+        result.secondaryRecommendation = "Mentor Circle";
+        result.secondaryDescription =
+            "A strong complementary step for meeting people, getting perspective, and building relationships around your idea.";
     }
 
     if (answers.ideaStage === "yes" && answers.blocker === "network") {
         result.nextStep = "Connect with mentors and partners who can help turn your idea into traction.";
     }
+
+    result.aiSummary =
+        `Based on your answers, your best next step is to start with ${result.primaryRecommendation}, with ${result.secondaryRecommendation} as your strongest follow-up.`;
+
+    result.why =
+        `You said you are ${stagePhraseMap[answers.ideaStage]}, that ${blockerPhraseMap[answers.blocker]}, and that you would benefit most from ${supportPhraseMap[answers.support]}. That makes ${result.primaryRecommendation} the strongest first match, with ${result.secondaryRecommendation} as the next best layer of support.`;
 
     return result;
 }
@@ -242,6 +316,13 @@ function showResults(result) {
     opportunityMatch.textContent = result.opportunity;
     opportunityPill.textContent = result.opportunityType;
 
+    aiSummary.textContent = result.aiSummary;
+    primaryRecTitle.textContent = result.primaryRecommendation;
+    primaryRecDescription.textContent = result.primaryDescription;
+    secondaryRecTitle.textContent = result.secondaryRecommendation;
+    secondaryRecDescription.textContent = result.secondaryDescription;
+    recommendationWhy.textContent = result.why;
+
     resultsSection.classList.remove("hidden");
     resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -255,6 +336,16 @@ function resetExperience() {
     chatOptions.innerHTML = "";
     resultsSection.classList.add("hidden");
     startChatButton.style.display = "inline-flex";
+
+    aiSummary.textContent = "Complete the guide to unlock your personalized event recommendations.";
+    primaryRecTitle.textContent = "Founder Workshop";
+    primaryRecDescription.textContent =
+        "A beginner-friendly session designed to help students move from curiosity to a clearer startup direction.";
+    secondaryRecTitle.textContent = "Mentor Circle";
+    secondaryRecDescription.textContent =
+        "A more personal entry point for students who need guidance, confidence-building, and connection.";
+    recommendationWhy.textContent =
+        "The guide uses your founder stage, blocker, and support preferences to match you with the most relevant next opportunities.";
 }
 
 startChatButton.addEventListener("click", startChat);
