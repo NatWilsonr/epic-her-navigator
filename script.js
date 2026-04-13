@@ -1,11 +1,11 @@
 const questions = [
     {
         id: "ideaStage",
-        prompt: "First, where are you right now in your entrepreneurial journey?",
+        prompt: "Where are you right now in your entrepreneurial journey?",
         options: [
             { label: "I already have a startup idea", value: "yes" },
             { label: "I have a rough idea, but it is still fuzzy", value: "kind-of" },
-            { label: "I am interested, but I do not have an idea yet", value: "not-yet" }
+            { label: "I’m interested, but I do not have an idea yet", value: "not-yet" }
         ]
     },
     {
@@ -50,7 +50,6 @@ const chatMessages = document.getElementById("chat-messages");
 const chatOptions = document.getElementById("chat-options");
 const startChatButton = document.getElementById("start-chat");
 const resetChatButton = document.getElementById("reset-chat");
-const tryAgainButton = document.getElementById("try-again");
 const resultsSection = document.getElementById("results-section");
 
 const profileTag = document.getElementById("profile-tag");
@@ -63,6 +62,10 @@ const mentorPill = document.getElementById("mentor-pill");
 const opportunityMatch = document.getElementById("opportunity-match");
 const opportunityPill = document.getElementById("opportunity-pill");
 const pathSteps = document.getElementById("path-steps");
+
+const cardWorkshop = document.getElementById("card-workshop");
+const cardMentor = document.getElementById("card-mentor");
+const cardHackathon = document.getElementById("card-hackathon");
 
 function addMessage(text, sender = "bot") {
     const message = document.createElement("div");
@@ -99,7 +102,7 @@ function startChat() {
 
     addMessage("Hi! I’m your EPIC Her guide.", "bot");
     addMessage(
-        "I’ll ask you four quick questions to understand your founder stage, your biggest blocker, and the kind of support that would help you most.",
+        "I’ll ask you four quick questions to understand where you are in your founder journey and what kind of support would help you most.",
         "bot"
     );
 
@@ -119,14 +122,16 @@ function handleAnswer(option) {
     if (state.currentQuestionIndex < questions.length) {
         setTimeout(() => {
             askCurrentQuestion();
-        }, 300);
+        }, 260);
     } else {
         chatOptions.innerHTML = "";
         setTimeout(() => {
             addMessage("Thanks — I’ve mapped your EPIC Her entry path.", "bot");
             addMessage("Here’s the support route that fits you best right now.", "bot");
-            showResults(buildResult(state.answers));
-        }, 400);
+            const result = buildResult(state.answers);
+            showResults(result);
+            updateOpportunityCards(result.recommendedCards);
+        }, 380);
     }
 }
 
@@ -141,7 +146,8 @@ function buildResult(answers) {
         mentorType: "",
         opportunity: "",
         opportunityType: "",
-        path: []
+        path: [],
+        recommendedCards: []
     };
 
     if (answers.ideaStage === "not-yet") {
@@ -210,6 +216,7 @@ function buildResult(answers) {
             "Book a mentor coffee chat",
             "Apply to the Her Hackathon"
         ];
+        result.recommendedCards = ["workshop", "mentor"];
     } else if (answers.blocker === "direction") {
         result.nextStep = "Use a structured pathway to move from curiosity into a concrete first project.";
         result.opportunityType = "Structured pathway";
@@ -221,6 +228,7 @@ function buildResult(answers) {
             "Meet a mentor for feedback",
             "Join a challenge or hackathon"
         ];
+        result.recommendedCards = ["workshop", "mentor"];
     } else if (answers.blocker === "network") {
         result.nextStep = "Prioritize community, mentor access, and higher-visibility EPIC opportunities.";
         result.opportunityType = "Network-building pathway";
@@ -232,6 +240,7 @@ function buildResult(answers) {
             "Join a peer founder group",
             "Pitch at a showcase or community event"
         ];
+        result.recommendedCards = ["mentor", "hackathon"];
     } else {
         result.nextStep = "Start with skill-building and then move quickly into applied practice.";
         result.opportunityType = "Skills-to-action pathway";
@@ -243,6 +252,7 @@ function buildResult(answers) {
             "Get mentor feedback",
             "Join the Her Hackathon or venture challenge"
         ];
+        result.recommendedCards = ["workshop", "hackathon"];
     }
 
     if (answers.support === "team") {
@@ -251,6 +261,7 @@ function buildResult(answers) {
             "Because you are looking for collaborators, your best path includes community events, founder matching, and challenge-based participation.";
         result.path[0] = "Join a founder matching session";
         result.path[1] = "Meet potential collaborators";
+        result.recommendedCards = ["hackathon", "mentor"];
     }
 
     if (answers.ideaStage === "yes" && answers.blocker === "network") {
@@ -286,6 +297,21 @@ function showResults(result) {
     resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function updateOpportunityCards(recommendedCards) {
+    const cards = [cardWorkshop, cardMentor, cardHackathon];
+
+    cards.forEach((card) => {
+        card.classList.remove("is-recommended");
+    });
+
+    recommendedCards.forEach((cardName) => {
+        const target = document.querySelector(`[data-card="${cardName}"]`);
+        if (target) {
+            target.classList.add("is-recommended");
+        }
+    });
+}
+
 function resetExperience() {
     state.started = false;
     state.currentQuestionIndex = 0;
@@ -295,8 +321,8 @@ function resetExperience() {
     chatOptions.innerHTML = "";
     resultsSection.classList.add("hidden");
     startChatButton.style.display = "inline-flex";
+    updateOpportunityCards([]);
 }
 
 startChatButton.addEventListener("click", startChat);
 resetChatButton.addEventListener("click", resetExperience);
-tryAgainButton.addEventListener("click", resetExperience);
